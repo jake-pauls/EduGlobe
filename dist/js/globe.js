@@ -1,4 +1,4 @@
-//import * as THREE from "three";
+import * as THREE from "three";
 var scene = THREE.Scene();
 var camera = THREE.PerspectiveCamera(
   90,
