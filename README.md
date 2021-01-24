@@ -10,9 +10,7 @@
   <img alt="Three.Js" src="https://img.shields.io/badge/Three%2Cjs-r124-blue" />
 </p>
 
-</br>
----
-</br>
+--- 
 
 ## Built using Three.js and vanilla HTML/CSS/JavaScript
 
