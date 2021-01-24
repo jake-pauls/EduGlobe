@@ -10,12 +10,20 @@
 const COVID_API_URL = "https://disease.sh/v3/covid-19/countries?yesterday=true&twoDaysAgo=false&sort=cases&allowNull=true";
 var covid_parameter_type;
 
+// Earthquake Data
+const EARTHQUAKE_API_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&limit=10";
+
 window.addEventListener("load", (event) => {
   var covid_button = document.getElementById("covid_button");
+  var earthquake_button = document.getElementById("earthquake_button");
 
   // Event Listeners for buttons
   covid_button.addEventListener('click', () => {
-    callAPI(COVID_API_URL);
+    callAPI(COVID_API_URL, 0);
+  });
+
+  earthquake_button.addEventListener('click', () => {
+    callAPI(EARTHQUAKE_API_URL, 1);
   });
 });
 
@@ -113,7 +121,7 @@ function animate() {
   requestAnimationFrame(animate);
   // Rotate clouds on y axis
   clouds.rotation.y += 0.001;
-  
+
   controls.update();
   renderer.render(scene, camera);
 }
@@ -143,12 +151,14 @@ function latLongToVector3(latitude, longitude, radius) {
  */
 function plotCovidDataPoints(data, scene) {
   // Check dropdown
-  covid_parameter_type = document.getElementById("covid_parameter_type").selectedIndex;  
+  covid_parameter_type = document.getElementById("covid_parameter_type").selectedIndex;
 
   // Check if datapoints have been rendered previously
   var numberRendered = document.getElementById("numberRendered").value;
-  if (numberRendered !== 0) 
-    cleanupDataPoints("covid_data_point_", numberRendered);
+  var dataPointName = document.getElementById("dataPointName").value;
+  console.log(dataPointName);
+  if (numberRendered !== 0)
+    cleanupDataPoints(dataPointName, numberRendered);
 
   // Count datapoints entered
   var counter = 0;
@@ -167,17 +177,17 @@ function plotCovidDataPoints(data, scene) {
     var colour;
 
     if (covid_parameter_type === 0) {
-      zScale = Math.log(cases/10000);
+      zScale = Math.log(cases / 10000);
       colour = "red";
     }
 
     if (covid_parameter_type === 1) {
-      zScale = Math.log(deaths/10000);
+      zScale = Math.log(deaths / 10000);
       colour = "grey";
     }
-      
+
     if (covid_parameter_type === 2) {
-      zScale = Math.log(tests/10000);
+      zScale = Math.log(tests / 10000);
       colour = "green";
     }
 
@@ -191,7 +201,7 @@ function plotCovidDataPoints(data, scene) {
     // Set the plane in 3D space
     pointMesh.position.set(vector3.x, vector3.y, vector3.z);
     pointMesh.lookAt(new THREE.Vector3(0, 0, 0));
-    
+
     // Add the mesh name and increment counter for cleanup
     pointMesh.name = "covid_data_point_" + i;
     counter++;
@@ -201,6 +211,52 @@ function plotCovidDataPoints(data, scene) {
 
   // Set the value for the number of meshes to cleanup
   document.getElementById("numberRendered").value = counter;
+  document.getElementById("dataPointName").value = "covid_data_point";
+}
+
+function plotEarthquakeDataPoints(data, scene) {
+  // Check if datapoints have been rendered previously
+  var numberRendered = document.getElementById("numberRendered").value;
+  var dataPointName = document.getElementById("dataPointName").value;
+  console.log(dataPointName);
+  if (numberRendered !== 0)
+    cleanupDataPoints(dataPointName, numberRendered);
+
+  // Count datapoints entered
+  var counter = 0;
+
+  data.map((d, i) => {
+    //  Varaibles to define vector
+    var latitude = d[1];
+    var longitude = d[2];
+    var vector3 = latLongToVector3(latitude, longitude, 2);
+
+    var magnitude = d[0];
+    var zScale = Math.log(magnitude)/10;
+
+    // Have Three.js generate planes at the data points
+    var pointGeometry = new THREE.SphereGeometry(zScale, 15, 15);
+    var pointMaterial = new THREE.MeshBasicMaterial({
+      color: new THREE.Color("yellow"),
+      transparent: true,
+      opacity: 0.7,
+    })
+    var pointMesh = new THREE.Mesh(pointGeometry, pointMaterial);
+
+    // Set the plane in 3D space
+    pointMesh.position.set(vector3.x, vector3.y, vector3.z+0.08);
+    pointMesh.lookAt(new THREE.Vector3(0, 0, 0));
+
+    // Add the mesh name and increment counter for cleanup
+    pointMesh.name = "earthquake_data_point" + i;
+    counter++;
+
+    scene.add(pointMesh);
+  });
+
+  // Set the value for the number of meshes to cleanup
+  document.getElementById("numberRendered").value = counter;
+  document.getElementById("dataPointName").value = "earthquake_data_point";
 }
 
 /**
@@ -210,9 +266,9 @@ function plotCovidDataPoints(data, scene) {
  */
 function cleanupDataPoints(dataPointName, bound) {
   for (var i = 0; i < bound; i++) {
-      var dataPoint = scene.getObjectByName(dataPointName+i);
-      scene.remove(dataPoint);
-      animate
+    var dataPoint = scene.getObjectByName(dataPointName + i);
+    scene.remove(dataPoint);
+    animate
   }
 }
 
@@ -222,7 +278,7 @@ function cleanupDataPoints(dataPointName, bound) {
  * Calls desired API using the fetch() function
  * @param {string} api_url URL pointing to API to be fetched
  */
-function callAPI(api_url) {
+function callAPI(api_url, type) {
   fetch(api_url)
     .then(
       (response) => {
@@ -232,7 +288,10 @@ function callAPI(api_url) {
         }
         response.json().then(
           (data) => {
-            parseCovidJSON(data);
+            if (type == 0)
+              parseCovidJSON(data);
+            if (type == 1)
+              parseEarthquakeJSON(data);
           });
       })
     .catch((err) => {
@@ -256,4 +315,21 @@ function parseCovidJSON(jsonData) {
     covidData[i] = [country, lat, long, cases, deaths, tests];
   }
   plotCovidDataPoints(covidData, scene);
+}
+
+/**
+ * Parses earthquake geoJSON data int JavaScript Object arrays retrieved from the fetched API
+ * @param {geoJSON} geoJSONData 
+ */
+function parseEarthquakeJSON(geoJSONData) {
+  var earthquakeData = new Array();
+  ref = geoJSONData.features;
+  for (var i = 0; i < ref.length; i++) {
+    magnitude = ref[i].properties.mag;
+    title = ref[i].properties.title;
+    long = ref[i].geometry.coordinates[0];
+    lat = ref[i].geometry.coordinates[1];
+    earthquakeData[i] = [magnitude, lat, long, title];
+  }
+  plotEarthquakeDataPoints(earthquakeData, scene);
 }
