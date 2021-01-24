@@ -31,6 +31,7 @@ h3 {
 .button {
     border-radius: 20px;
     padding: 20px;
+    background-color: white;
     font-size: large;
     font-weight: bold;
 }
@@ -68,6 +69,7 @@ h3 {
     object-fit: cover;
     background-size: cover;
     background-repeat:no-repeat;
+    overflow: auto;
     
   }
 
