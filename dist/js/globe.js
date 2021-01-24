@@ -1,17 +1,23 @@
-
-const dataset = [
-  {
-    origin: { name: "New York", latitude: 40.73061, longitude: -73.935242 }
-  },
-  {
-    origin: { name: "Miami", latitude: 25.761681, longitude: -80.191788 }
-  }
-];
-
 //import * as THREE from "three";
 
 //import { BackSide } from "three";
 // import { DirectionalLight } from "three";
+
+/* Button Listeners for APIs */
+
+// COVID Data Per Country
+const COVID_API_URL = "https://disease.sh/v3/covid-19/countries?yesterday=true&twoDaysAgo=false&sort=cases&allowNull=true";
+
+window.addEventListener("load", (event) => {
+  var covid_button = document.getElementById("covid_button");
+
+  // Event Listeners for buttons
+  covid_button.addEventListener('click', () => {
+    callAPI(COVID_API_URL);
+  });
+});
+
+/* Three.js */
 
 //creates scene and camera
 var scene = new THREE.Scene();
@@ -38,93 +44,49 @@ var ambient = new THREE.AmbientLight(0xffffff, 0.1);
 scene.add(ambient);
 
 
-// D3 Data Mapping
-d3.json("https://raw.githubusercontent.com/baronwatts/data/master/world.json",
+controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-  (error, data) => {
+var texture = new THREE.TextureLoader().load("assets/worldMapHD.jpg");
+texture.needsUpdate = true;
+texture.wrapS = THREE.RepeatWrapping;
+texture.wrapT = THREE.RepeatWrapping;
+texture.repeat.set(1, 1);
 
-    // Projecting equirectangular data
-    var projection = d3.geo
-      .equirectangular()
-      .translate([1024, 512])
-      .scale(326);
-      
-    // Retrieve polygonal information from topographical json file
-    var countries = topojson.feature(data, data.objects.countries);
+var bump = new THREE.TextureLoader().load("assets/bump4k.jpg");
+var spec = new THREE.TextureLoader().load("assets/spec4k.jpg");
+var nightLight = new THREE.TextureLoader().load("assets/city.jpg");
+var city = new THREE.Color('orange');
+var BG = new THREE.TextureLoader().load("assets/spaceBG.jpg");
 
-    // Add a d3 canvas
-    var canvas = d3
-      .select("body")
-      .append("canvas")
-      .style("display", "none")
-      .attr("width", "2048px")
-      .attr("height", "1024px");
+//geometry and material
+var geometry = new THREE.SphereGeometry(2, 32, 32);
+var material = new THREE.MeshPhongMaterial({
+  map: texture,
+  bumpMap: bump,
+  bumpScale: 0.05,
+  specularMap: spec,
+  shininess: 10,
+  emissiveMap: nightLight,
+  emissive: city,
+  emissiveIntensity: 0.2,
+  color: new THREE.Color("white"),
+  transparent: true,
+  opacity: 1,
+});
+var globe = new THREE.Mesh(geometry, material);
 
-    var context = canvas.node().getContext("2d");
+var geoSky = new THREE.SphereGeometry(30, 32, 32);
+var matSky = new THREE.MeshBasicMaterial({
+  map: BG,
+  side: THREE.BackSide,
+})
+var sky = new THREE.Mesh(geoSky, matSky);
 
-    var path = d3.geo
-      .path()
-      .projection(projection)
-      .context(context);
+scene.add(globe);
+scene.add(sky);
 
-    context.strokeStyle = "white";
-    context.lineWidth = 0.5;
-    context.fillStyle = "#000";
-
-    context.beginPath();
-
-    path(countries);
-
-    context.fill();
-    context.stroke();
-
-    controls = new THREE.OrbitControls(camera, renderer.domElement);
-  
-    //    var texture = new THREE.TextureLoader().load("assets/worldMapHD.jpg");
-    var texture = new THREE.Texture(canvas.node());
-    texture.needsUpdate = true;
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(1, 1);
-
-    var bump = new THREE.TextureLoader().load("assets/bump4k.jpg");
-    var spec = new THREE.TextureLoader().load("assets/spec4k.jpg");
-    var nightLight = new THREE.TextureLoader().load("assets/city.jpg");
-    var city = new THREE.Color('orange');
-    var BG = new THREE.TextureLoader().load("assets/spaceBG.jpg");
-
-    //geometry and material
-    var geometry = new THREE.SphereGeometry(2, 32, 32);
-    var material = new THREE.MeshPhongMaterial({
-      map: texture,
-      bumpMap: bump,
-      bumpScale: 0.05,
-      specularMap: spec,
-      shininess: 10,
-      emissiveMap: nightLight,
-      emissive: city,
-      emissiveIntensity: 0.2,
-      color: new THREE.Color("white"),
-      transparent: true,
-      opacity: 1,
-    });
-    var globe = new THREE.Mesh(geometry, material);
-
-    var geoSky = new THREE.SphereGeometry(30, 32, 32);
-    var matSky = new THREE.MeshBasicMaterial({
-      map: BG,
-      side: THREE.BackSide,
-    })
-    var sky = new THREE.Mesh(geoSky, matSky);
-
-    scene.add(globe);
-    scene.add(sky);
-
-    camera.position.z = 4;
-    plotDataPoints(dataset, scene);
-    animate();
-  }
-);
+camera.position.z = 4;
+animate();
 
 // Animates WebGL Canvas
 function animate() {
@@ -133,32 +95,64 @@ function animate() {
 }
 
 // Converts latitude and longitude to Vector3 values which can be rendered on the globe
-function latLongToVector3(lat, lon, radius) {
-  var phi = (lat)*Math.PI/180;
-  var theta = (lon-180)*Math.PI/180;
+function latLongToVector3(latitude, longitude, radius) {
+  var phi = (latitude) * Math.PI / 180;
+  var theta = (longitude - 180) * Math.PI / 180;
 
   var x = -(radius) * Math.cos(phi) * Math.cos(theta);
   var y = (radius) * Math.sin(phi);
   var z = (radius) * Math.cos(phi) * Math.sin(theta);
 
-  return new THREE.Vector3(x,y,z);
+  return new THREE.Vector3(x, y, z);
 }
 
 function plotDataPoints(data, scene) {
   data.map((d, i) => {
-      var latitude = d.origin.latitude;
-      var longitude = d.origin.longitude;
-      var vector3 = latLongToVector3(latitude, longitude, 2);
+    var latitude = d[1];
+    var longitude = d[2];
+    var vector3 = latLongToVector3(latitude, longitude, 2);
 
-      // Have Three.js generate planes at the data points
-      var pointGeometry = new THREE.SphereGeometry(1, 10, 10);
-      var pointMaterial = new THREE.MeshBasicMaterial({
-        color: new THREE.Color("white")
-      })
-      var pointMesh = new THREE.Mesh(pointGeometry, pointMaterial);
+    // Have Three.js generate planes at the data points
+    var pointGeometry = new THREE.SphereGeometry(0.01, 10, 10);
+    var pointMaterial = new THREE.MeshBasicMaterial({
+      color: new THREE.Color("red")
+    })
+    var pointMesh = new THREE.Mesh(pointGeometry, pointMaterial);
 
-      // Set the plane in 3D space
-      pointMesh.position.set(vector3);
-      scene.add(pointMesh);
+    // Set the plane in 3D space
+    pointMesh.position.set(vector3.x, vector3.y, vector3.z);
+    pointMesh.lookAt(new THREE.Vector3(0, 0, 0));
+    scene.add(pointMesh);
   });
+}
+
+/* API Functions */
+function callAPI(api_url) {
+  fetch(api_url)
+    .then(
+      (response) => {
+        if (response.status !== 200) {
+          console.log('Oops! Error retrieving API data with status code: ' + response.status);
+          return;
+        }
+        response.json().then(
+          (data) => {
+            parseCovidJSON(data);
+          });
+      })
+    .catch((err) => {
+      console.log('Oops! An error occurred during the fetch:-S', err);
+    });
+}
+
+// [country, lat, long]
+function parseCovidJSON(jsonData) {
+  var covidData = new Array();
+  for (var i = 0; i < jsonData.length; i++) {
+    country = jsonData[i].country;
+    lat = jsonData[i].countryInfo.lat;
+    long = jsonData[i].countryInfo.long;
+    covidData[i] = [country, lat, long];
+  }
+  plotDataPoints(covidData, scene);
 }

@@ -1,17 +1,4 @@
 // Fetch APIs
-
-// COVID Data Per Country
-const COVID_API_URL = "https://disease.sh/v3/covid-19/countries?yesterday=true&twoDaysAgo=false&sort=cases&allowNull=true";
-
-window.addEventListener("load", (event) => {
-    var covid_button = document.getElementById("covid_button");
-
-    // Event Listeners for buttons
-    covid_button.addEventListener('click', () => {
-        callAPI(COVID_API_URL);
-    });
-});
-
 function callAPI(api_url) {
     fetch(api_url)
         .then(
@@ -22,7 +9,7 @@ function callAPI(api_url) {
                 }
                 response.json().then(
                     (data) => {
-                        processCovidJSON(data);
+                        parseCovidJSON(data);
                     });
             })
         .catch((err) => {
@@ -31,7 +18,7 @@ function callAPI(api_url) {
 }
 
 // [country, lat, long]
-function processCovidJSON(jsonData) {
+function parseCovidJSON(jsonData) {
     var covidData = new Array();
     for (var i = 0; i < jsonData.length; i++) {
         country = jsonData[i].country;
