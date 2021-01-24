@@ -68,7 +68,6 @@ h3 {
     width: 30%;
     height: 40%;
     object-fit: cover;
-    background-image: url("/Baseline/dist/assets/virus.jpg");
     background-size: cover;
     background-repeat:no-repeat;
     
