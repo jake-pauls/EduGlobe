@@ -33,6 +33,7 @@ h3 {
 .button {
     border-radius: 20px;
     padding: 20px;
+    background-color: white;
     font-size: large;
     font-weight: bold;
 }
