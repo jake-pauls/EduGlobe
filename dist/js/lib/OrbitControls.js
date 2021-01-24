@@ -25,7 +25,7 @@ THREE.OrbitControls = function (object, domElement) {
   this.target = new THREE.Vector3();
 
   // How far you can dolly in and out ( PerspectiveCamera only )
-  this.minDistance = 0;
+  this.minDistance = 3;
   this.maxDistance = 8;
 
   // How far you can zoom in and out ( OrthographicCamera only )
@@ -44,7 +44,7 @@ THREE.OrbitControls = function (object, domElement) {
 
   // Set to true to enable damping (inertia)
   // If damping is enabled, you must call controls.update() in your animation loop
-  this.enableDamping = false;
+  this.enableDamping = true;
   this.dampingFactor = 0.05;
 
   // This option actually enables dollying in and out; left as "zoom" for backwards compatibility.

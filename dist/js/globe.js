@@ -30,7 +30,7 @@ var renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-var pointLight = new THREE.PointLight(0xffffff, 5.0, 30);
+var pointLight = new THREE.PointLight(0xffffff, 2.0, 30);
 pointLight.position.set(10, 10, 10);
 scene.add(pointLight);
 
@@ -38,50 +38,11 @@ var ambient = new THREE.AmbientLight(0xffffff, 0.1);
 scene.add(ambient);
 
 
-// D3 Data Mapping
-d3.json("https://raw.githubusercontent.com/baronwatts/data/master/world.json",
-
-  (error, data) => {
-
-    // Projecting equirectangular data
-    var projection = d3.geo
-      .equirectangular()
-      .translate([1024, 512])
-      .scale(326);
-      
-    // Retrieve polygonal information from topographical json file
-    var countries = topojson.feature(data, data.objects.countries);
-
-    // Add a d3 canvas
-    var canvas = d3
-      .select("body")
-      .append("canvas")
-      .style("display", "none")
-      .attr("width", "2048px")
-      .attr("height", "1024px");
-
-    var context = canvas.node().getContext("2d");
-
-    var path = d3.geo
-      .path()
-      .projection(projection)
-      .context(context);
-
-    context.strokeStyle = "white";
-    context.lineWidth = 0.5;
-    context.fillStyle = "#000";
-
-    context.beginPath();
-
-    path(countries);
-
-    context.fill();
-    context.stroke();
-
+  
     controls = new THREE.OrbitControls(camera, renderer.domElement);
   
-    var texture = new THREE.TextureLoader().load("assets/worldMapHD.jpg");
-    //var texture = new THREE.Texture(canvas.node());
+    var texture = new THREE.TextureLoader().load("assets/earthmap2k.jpg");
+    
     texture.needsUpdate = true;
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
@@ -110,6 +71,27 @@ d3.json("https://raw.githubusercontent.com/baronwatts/data/master/world.json",
       opacity: 1,
 
     });
+
+    //render the earth
+    var globe = new THREE.Mesh(geometry, material);
+    scene.add(globe);
+
+    //geometry, texture and material for the Sky 
+    var cloudsTexture = new THREE.TextureLoader().load("assets/clouds2k.jpg");
+    var cloudGeo = new THREE.SphereGeometry(2.01, 32, 32);
+    var cloudMaterial = new THREE.MeshPhongMaterial({
+      map: cloudsTexture,
+      
+      wireframe: false,
+      color: new THREE.Color("white"),
+      transparent: true,
+      opacity: 0.3,
+
+    });
+
+    //render the earth
+    var clouds = new THREE.Mesh(cloudGeo, cloudMaterial);
+    scene.add(clouds);
     
     ///////////////////////////////////
 
@@ -119,7 +101,7 @@ d3.json("https://raw.githubusercontent.com/baronwatts/data/master/world.json",
     var v = latLongToVector3(49.27,-122.76, 2);
 
     // Have Three.js generate planes at the data points
-    var pointGeometry = new THREE.SphereGeometry(0.1, 10, 10);
+    var pointGeometry = new THREE.SphereGeometry(0.01, 10, 10);
     var pointMaterial = new THREE.MeshBasicMaterial({
       color:"red",
     })
@@ -135,10 +117,8 @@ d3.json("https://raw.githubusercontent.com/baronwatts/data/master/world.json",
 
 
 
-    //render the earth
-    var globe = new THREE.Mesh(geometry, material);
-    scene.add(globe);
-
+    
+    //background space texture
     var geoSky = new THREE.SphereGeometry(30, 32, 32);
     var matSky = new THREE.MeshBasicMaterial({
       map: BG,
@@ -148,15 +128,19 @@ d3.json("https://raw.githubusercontent.com/baronwatts/data/master/world.json",
 
     scene.add(sky);
 
+
+
     camera.position.z = 4;
     //plotDataPoints(dataset, scene);
     animate();
-  }
-);
+ 
 
 // Animates WebGL Canvas
 function animate() {
   requestAnimationFrame(animate);
+  clouds.rotation.y +=0.001;
+  
+  controls.update();
   renderer.render(scene, camera);
 }
 
