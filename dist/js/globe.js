@@ -111,8 +111,9 @@ animate();
  */
 function animate() {
   requestAnimationFrame(animate);
+  // Rotate clouds on y axis
   clouds.rotation.y += 0.001;
-
+  
   controls.update();
   renderer.render(scene, camera);
 }

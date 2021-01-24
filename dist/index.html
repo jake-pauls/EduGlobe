@@ -1,21 +1,27 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="stylesheet" href="css/styles.css" />
-        <link rel="icon" type="image/svg+xml" href="assets/eduglobe-logo.svg"/>
-        <title>Eduglobe</title>
-    </head>
-    <body>
-        <h1 id="display"></h1>
-        <script src="js/lib/three.js"></script>
-        <script src="js/lib/OrbitControls.js"></script>
-        <script src="js/globe.js"></script>
-        <button id="covid_button">Covid API</button>
+<head>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="icon" type="image/svg+xml" href="assets/eduglobe-logo.svg" />
+    <title>Eduglobe</title>
+</head>
+<body>
+    <div class="logo">
+        <img src="assets/eduglobe-logo.svg" />
+    </div>
+    <script src="js/lib/three.js"></script>
+    <script src="js/lib/OrbitControls.js"></script>
+    <script src="js/globe.js"></script>
+    <div class="html_elements">
+        <h1>Educate yourself with EduGlobe</h1>
+        <h3>EduGlobe is 3D visual analytics designed to increase the awareness of global issues</h3>
+        <button id="covid_button">Covid-19</button>
         <select id="covid_parameter_type" name="covid_parameter_type">
             <option value="cases">Cases</option>
             <option value="cases">Deaths</option>
             <option value="cases">Tests</option>
         </select>
-        <input type="hidden" id="numberRendered" value=""/>
-    </body>
+        <input type="hidden" id="numberRendered" value="" />
+    </div>
+</body>
 </html>

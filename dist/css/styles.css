@@ -1,3 +1,28 @@
-body {
-    margin: 10;
+html {
+    font-family: 'Archivo', sans-serif;
+}
+
+canvas {
+    overflow: hidden;
+}
+
+h1 {
+    color: white;
+}
+
+h3 {
+    color: white;
+}
+
+.logo {
+    margin: 20px;
+    padding: 10px;
+    position: absolute;
+}
+
+.html_elements {
+    position: absolute;
+    top: 85%;
+    margin-bottom: 40px;
+    padding: 20px;
 }
