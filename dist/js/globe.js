@@ -40,7 +40,7 @@ var pointLight = new THREE.PointLight(0xffffff, 2.0, 30);
 pointLight.position.set(10, 10, 10);
 scene.add(pointLight);
 
-var ambient = new THREE.AmbientLight(0xffffff, 0.1);
+var ambient = new THREE.AmbientLight(0xffffff, 0.3);
 scene.add(ambient);
 
 
@@ -128,14 +128,23 @@ function latLongToVector3(latitude, longitude, radius) {
 
 function plotDataPoints(data, scene) {
   data.map((d, i) => {
+    //  Varaibles to define vector
     var latitude = d[1];
     var longitude = d[2];
     var vector3 = latLongToVector3(latitude, longitude, 2);
 
+    // Variables to define impact
+    var cases = d[3];
+    var deaths = d[4];
+    var tests = d[5];
+
+    // Scale radius based on cases
+    var zScale = Math.log(cases/10000);
+
     // Have Three.js generate planes at the data points
-    var pointGeometry = new THREE.SphereGeometry(0.01, 10, 10);
+    var pointGeometry = new THREE.BoxGeometry(0.01, 0.01, zScale);
     var pointMaterial = new THREE.MeshBasicMaterial({
-      color: new THREE.Color("red")
+      color: new THREE.Color("red"),
     })
     var pointMesh = new THREE.Mesh(pointGeometry, pointMaterial);
 
@@ -172,7 +181,10 @@ function parseCovidJSON(jsonData) {
     country = jsonData[i].country;
     lat = jsonData[i].countryInfo.lat;
     long = jsonData[i].countryInfo.long;
-    covidData[i] = [country, lat, long];
+    cases = jsonData[i].cases;
+    deaths = jsonData[i].deaths;
+    tests = jsonData[i].tests;
+    covidData[i] = [country, lat, long, cases, deaths, tests];
   }
   plotDataPoints(covidData, scene);
 }
