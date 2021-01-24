@@ -7,7 +7,7 @@
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(
   //fov
-  90,
+  75,
   //aspect
   window.innerWidth/window.innerHeight,
   //near, far
@@ -22,7 +22,7 @@ document.body.appendChild(renderer.domElement);
 
 controls = new THREE.OrbitControls(camera, renderer.domElement);
 //far light source
-var pointLight = new THREE.PointLight(0xffffff, 5.0, 30);
+var pointLight = new THREE.PointLight(0xffffff, 4.0, 30);
 pointLight.position.set(10,10,10);
 scene.add(pointLight);
 
@@ -31,7 +31,7 @@ scene.add(pointLight);
 
  
 //ambient light source
-var ambient = new THREE.AmbientLight(0xffffff, 0.1);
+var ambient = new THREE.AmbientLight(0xffffff, 0.5);
 scene.add(ambient);
 
 //laod textures
@@ -87,6 +87,12 @@ camera.position.z = 4;
 
 var animate = function(controls){
   requestAnimationFrame(animate);
+
+  //globe.rotation.y += 0.01;
+  //pointLight.rotation.y += 0.1;
+  // pointLight.rotateOnAxis(THREE.Vector3(0,1,0), 0.2);
+
+
   renderer.render(scene, camera);
 }
 
