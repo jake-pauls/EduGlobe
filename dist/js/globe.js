@@ -211,7 +211,7 @@ function plotCovidDataPoints(data, scene) {
 
   // Set the value for the number of meshes to cleanup
   document.getElementById("numberRendered").value = counter;
-  document.getElementById("dataPointName").value = "covid_data_point";
+  document.getElementById("dataPointName").value = "covid_data_point_";
 }
 
 function plotEarthquakeDataPoints(data, scene) {
@@ -248,7 +248,7 @@ function plotEarthquakeDataPoints(data, scene) {
     pointMesh.lookAt(new THREE.Vector3(0, 0, 0));
 
     // Add the mesh name and increment counter for cleanup
-    pointMesh.name = "earthquake_data_point" + i;
+    pointMesh.name = "earthquake_data_point_" + i;
     counter++;
 
     scene.add(pointMesh);
@@ -256,7 +256,7 @@ function plotEarthquakeDataPoints(data, scene) {
 
   // Set the value for the number of meshes to cleanup
   document.getElementById("numberRendered").value = counter;
-  document.getElementById("dataPointName").value = "earthquake_data_point";
+  document.getElementById("dataPointName").value = "earthquake_data_point_";
 }
 
 /**
