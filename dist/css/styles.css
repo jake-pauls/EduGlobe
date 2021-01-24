@@ -70,6 +70,7 @@ h3 {
     object-fit: cover;
     background-size: cover;
     background-repeat:no-repeat;
+    overflow: auto;
     
   }
 
