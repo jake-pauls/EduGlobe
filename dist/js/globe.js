@@ -80,8 +80,8 @@ d3.json("https://raw.githubusercontent.com/baronwatts/data/master/world.json",
 
     controls = new THREE.OrbitControls(camera, renderer.domElement);
   
-    //    var texture = new THREE.TextureLoader().load("assets/worldMapHD.jpg");
-    var texture = new THREE.Texture(canvas.node());
+    var texture = new THREE.TextureLoader().load("assets/worldMapHD.jpg");
+    //var texture = new THREE.Texture(canvas.node());
     texture.needsUpdate = true;
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
@@ -93,11 +93,12 @@ d3.json("https://raw.githubusercontent.com/baronwatts/data/master/world.json",
     var city = new THREE.Color('orange');
     var BG = new THREE.TextureLoader().load("assets/spaceBG.jpg");
 
-    //geometry and material
+    //geometry and material for the globe
     var geometry = new THREE.SphereGeometry(2, 32, 32);
     var material = new THREE.MeshPhongMaterial({
       map: texture,
       bumpMap: bump,
+      wireframe: false,
       bumpScale: 0.05,
       specularMap: spec,
       shininess: 10,
@@ -105,10 +106,38 @@ d3.json("https://raw.githubusercontent.com/baronwatts/data/master/world.json",
       emissive: city,
       emissiveIntensity: 0.2,
       color: new THREE.Color("white"),
-      transparent: true,
+      transparent: false,
       opacity: 1,
+
     });
+    
+    ///////////////////////////////////
+
+    //testg
+
+    //////////////////////////
+    var v = latLongToVector3(49.27,-122.76, 2);
+
+    // Have Three.js generate planes at the data points
+    var pointGeometry = new THREE.SphereGeometry(0.1, 10, 10);
+    var pointMaterial = new THREE.MeshBasicMaterial({
+      color:"red",
+    })
+    var pointMesh = new THREE.Mesh(pointGeometry, pointMaterial);
+    pointMesh.position.x = v.x;
+    pointMesh.position.y = v.y;
+    pointMesh.position.z = v.z;
+    
+    
+    // Set the plane in 3D space
+    
+    scene.add(pointMesh);
+
+
+
+    //render the earth
     var globe = new THREE.Mesh(geometry, material);
+    scene.add(globe);
 
     var geoSky = new THREE.SphereGeometry(30, 32, 32);
     var matSky = new THREE.MeshBasicMaterial({
@@ -117,11 +146,10 @@ d3.json("https://raw.githubusercontent.com/baronwatts/data/master/world.json",
     })
     var sky = new THREE.Mesh(geoSky, matSky);
 
-    scene.add(globe);
     scene.add(sky);
 
     camera.position.z = 4;
-    plotDataPoints(dataset, scene);
+    //plotDataPoints(dataset, scene);
     animate();
   }
 );
@@ -137,28 +165,28 @@ function latLongToVector3(lat, lon, radius) {
   var phi = (lat)*Math.PI/180;
   var theta = (lon-180)*Math.PI/180;
 
-  var x = -(radius) * Math.cos(phi) * Math.cos(theta);
+  var x = -((radius) * Math.cos(phi)) * Math.cos(theta);
   var y = (radius) * Math.sin(phi);
-  var z = (radius) * Math.cos(phi) * Math.sin(theta);
+  var z = ((radius) * Math.cos(phi)) * Math.sin(theta);
 
   return new THREE.Vector3(x,y,z);
 }
 
-function plotDataPoints(data, scene) {
-  data.map((d, i) => {
-      var latitude = d.origin.latitude;
-      var longitude = d.origin.longitude;
-      var vector3 = latLongToVector3(latitude, longitude, 2);
+// function plotDataPoints(data, scene) {
+//   data.map((d, i) => {
+//       var latitude = d.origin.latitude;
+//       var longitude = d.origin.longitude;
+//       var vector3 = latLongToVector3(latitude, longitude, 1);
 
-      // Have Three.js generate planes at the data points
-      var pointGeometry = new THREE.SphereGeometry(1, 10, 10);
-      var pointMaterial = new THREE.MeshBasicMaterial({
-        color: new THREE.Color("white")
-      })
-      var pointMesh = new THREE.Mesh(pointGeometry, pointMaterial);
+//       // Have Three.js generate planes at the data points
+//       var pointGeometry = new THREE.SphereGeometry(1, 10, 10);
+//       var pointMaterial = new THREE.MeshBasicMaterial({
+//         color: new THREE.Color("red")
+//       })
+//       var pointMesh = new THREE.Mesh(pointGeometry, pointMaterial);
 
-      // Set the plane in 3D space
-      pointMesh.position.set(vector3);
-      scene.add(pointMesh);
-  });
-}
+//       // Set the plane in 3D space
+//       pointMesh.position.set(vector3.x,vector3.y,vector3.z);
+//       scene.add(pointMesh);
+//   });
+// }
