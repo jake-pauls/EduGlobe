@@ -3,9 +3,6 @@
     <head>
         <link rel="stylesheet" href="css/styles.css" />
         <link rel="icon" type="image/svg+xml" href="assets/eduglobe-logo.svg"/>
-        <script src="js/fetch.js"></script>
-        <script src="js/lib/d3.js"></script>
-        <script src="js/lib/topojson.js"></script>
         <title>Eduglobe</title>
     </head>
     <body>
@@ -14,5 +11,11 @@
         <script src="js/lib/OrbitControls.js"></script>
         <script src="js/globe.js"></script>
         <button id="covid_button">Covid API</button>
+        <select id="covid_parameter_type" name="covid_parameter_type">
+            <option value="cases">Cases</option>
+            <option value="cases">Deaths</option>
+            <option value="cases">Tests</option>
+        </select>
+        <input type="hidden" id="numberRendered" value=""/>
     </body>
 </html>

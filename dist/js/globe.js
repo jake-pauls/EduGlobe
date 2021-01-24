@@ -7,6 +7,7 @@
 
 // COVID Data Per Country
 const COVID_API_URL = "https://disease.sh/v3/covid-19/countries?yesterday=true&twoDaysAgo=false&sort=cases&allowNull=true";
+var covid_parameter_type;
 
 window.addEventListener("load", (event) => {
   var covid_button = document.getElementById("covid_button");
@@ -126,33 +127,75 @@ function latLongToVector3(latitude, longitude, radius) {
   return new THREE.Vector3(x, y, z);
 }
 
-function plotDataPoints(data, scene) {
+function plotCovidDataPoints(data, scene) {
+  // Check dropdown
+  covid_parameter_type = document.getElementById("covid_parameter_type").selectedIndex;  
+
+  // Check if datapoints have been rendered previously
+  var numberRendered = document.getElementById("numberRendered").value;
+  if (numberRendered !== 0) 
+    cleanupDataPoints("covid_data_point_", numberRendered);
+
+  // Count datapoints entered
+  var counter = 0;
+
   data.map((d, i) => {
     //  Varaibles to define vector
     var latitude = d[1];
     var longitude = d[2];
     var vector3 = latLongToVector3(latitude, longitude, 2);
 
-    // Variables to define impact
+    // Variables to define impact, colour, and scale
     var cases = d[3];
     var deaths = d[4];
     var tests = d[5];
+    var zScale;
+    var colour;
 
-    // Scale radius based on cases
-    var zScale = Math.log(cases/10000);
+    if (covid_parameter_type === 0) {
+      zScale = Math.log(cases/10000);
+      colour = "red";
+    }
+
+    if (covid_parameter_type === 1) {
+      zScale = Math.log(deaths/10000);
+      colour = "black";
+    }
+      
+    if (covid_parameter_type === 2) {
+      zScale = Math.log(tests/10000);
+      colour = "green";
+    }
 
     // Have Three.js generate planes at the data points
     var pointGeometry = new THREE.BoxGeometry(0.01, 0.01, zScale);
     var pointMaterial = new THREE.MeshBasicMaterial({
-      color: new THREE.Color("red"),
+      color: new THREE.Color(colour),
     })
     var pointMesh = new THREE.Mesh(pointGeometry, pointMaterial);
 
     // Set the plane in 3D space
     pointMesh.position.set(vector3.x, vector3.y, vector3.z);
     pointMesh.lookAt(new THREE.Vector3(0, 0, 0));
+    
+    // Add the mesh name and increment counter for cleanup
+    pointMesh.name = "covid_data_point_" + i;
+    counter++;
+
     scene.add(pointMesh);
   });
+
+  // Set the value for the number of meshes to cleanup
+  document.getElementById("numberRendered").value = counter;
+}
+
+function cleanupDataPoints(dataPointName, bound) {
+  console.log("bound! -> "+bound);
+  for (var i = 0; i < bound; i++) {
+      var dataPoint = scene.getObjectByName(dataPointName+i);
+      scene.remove(dataPoint);
+      animate
+  }
 }
 
 /* API Functions */
@@ -186,5 +229,5 @@ function parseCovidJSON(jsonData) {
     tests = jsonData[i].tests;
     covidData[i] = [country, lat, long, cases, deaths, tests];
   }
-  plotDataPoints(covidData, scene);
+  plotCovidDataPoints(covidData, scene);
 }
