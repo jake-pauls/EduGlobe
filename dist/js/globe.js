@@ -47,7 +47,7 @@ scene.add(ambient);
 
 controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-var texture = new THREE.TextureLoader().load("assets/earthmap2k.jpg");
+var texture = new THREE.TextureLoader().load("assets/world.jpg");
 texture.needsUpdate = true;
 texture.wrapS = THREE.RepeatWrapping;
 texture.wrapT = THREE.RepeatWrapping;
@@ -173,7 +173,7 @@ function plotCovidDataPoints(data, scene) {
 
     if (covid_parameter_type === 1) {
       zScale = Math.log(deaths/10000);
-      colour = "black";
+      colour = "grey";
     }
       
     if (covid_parameter_type === 2) {

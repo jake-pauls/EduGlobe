@@ -2,8 +2,11 @@
 <html>
 <head>
     <link rel="stylesheet" href="css/styles.css" />
+   
     <link rel="icon" type="image/svg+xml" href="assets/eduglobe-logo.svg" />
     <title>Eduglobe</title>
+
+    
 </head>
 <body>
     <div class="logo">
@@ -12,16 +15,39 @@
     <script src="js/lib/three.js"></script>
     <script src="js/lib/OrbitControls.js"></script>
     <script src="js/globe.js"></script>
+    <script src="js/htmlJS.js"></script>
+    
     <div class="html_elements">
         <h1>Educate yourself with EduGlobe</h1>
         <h3>EduGlobe is 3D visual analytics designed to increase the awareness of global issues</h3>
-        <button id="covid_button">Covid-19</button>
-        <select id="covid_parameter_type" name="covid_parameter_type">
+        <button id="covid_button" class="button">Covid-19</button>
+        <select id="covid_parameter_type" name="covid_parameter_type" class="button">
             <option value="cases">Cases</option>
             <option value="cases">Deaths</option>
             <option value="cases">Tests</option>
         </select>
         <input type="hidden" id="numberRendered" value="" />
+
+        <button id="more_info" class="button">More Info</button>
+        <div id="CovidModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h1 style="color: white;">COVID-19</h1>
+                <p>
+                    Contagious disease caused by severe acute respiratory syndrome coronavirus. The first case was identified in Wuhan, China, in December 2019.
+                </p>
+                <h1>What can we do?</h1>
+                <ol>
+                    <li>Wear a mask</li>
+                    <li>Wash your hands frequently</li>
+                    <li>Avoid touching your face</li>
+                    <li>Maintain 6FT social distance</li>
+                </ol>
+            </div>
+        </div>
+
+        
+
     </div>
 </body>
 </html>

@@ -22,7 +22,62 @@ h3 {
 
 .html_elements {
     position: absolute;
-    top: 85%;
+    top: 70%;
+    left: 10%;
     margin-bottom: 40px;
     padding: 20px;
+}
+
+
+
+.button {
+    border-radius: 20px;
+    padding: 20px;
+    font-size: large;
+    font-weight: bold;
+}
+
+.modal {
+    display: none; /*Hidden by default */
+    position: fixed; /* Stay in place */
+    padding-top: 100px; /* Location of the box */
+    top:0;
+    right: 0;
+    margin-left: auto;
+   
+    
+    
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content */
+  .modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 20px;
+    padding: 20px;
+    margin-right: 20px;
+    border: 1px solid #888;
+    width: 30%;
+    height: 40%;
+    object-fit: cover;
+    background-image: url("/Baseline/dist/assets/virus.jpg");
+    background-size: cover;
+    background-repeat:no-repeat;
+    
+  }
+
+  /* The Close Button */
+.close {
+  color: "white";
+  float: right;
+  font-size: 50px;
+  font-weight: bold;
 }
