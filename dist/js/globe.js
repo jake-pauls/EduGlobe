@@ -36,7 +36,7 @@ var renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-var pointLight = new THREE.PointLight(0xffffff, 5.0, 30);
+var pointLight = new THREE.PointLight(0xffffff, 2.0, 30);
 pointLight.position.set(10, 10, 10);
 scene.add(pointLight);
 
@@ -46,7 +46,7 @@ scene.add(ambient);
 
 controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-var texture = new THREE.TextureLoader().load("assets/worldMapHD.jpg");
+var texture = new THREE.TextureLoader().load("assets/earthmap2k.jpg");
 texture.needsUpdate = true;
 texture.wrapS = THREE.RepeatWrapping;
 texture.wrapT = THREE.RepeatWrapping;
@@ -82,6 +82,23 @@ var matSky = new THREE.MeshBasicMaterial({
 })
 var sky = new THREE.Mesh(geoSky, matSky);
 
+//geometry, texture and material for the Sky 
+var cloudsTexture = new THREE.TextureLoader().load("assets/clouds2k.jpg");
+var cloudGeo = new THREE.SphereGeometry(2.01, 32, 32);
+var cloudMaterial = new THREE.MeshPhongMaterial({
+  map: cloudsTexture,
+
+  wireframe: false,
+  color: new THREE.Color("white"),
+  transparent: true,
+  opacity: 0.3,
+
+});
+
+//render the earth
+var clouds = new THREE.Mesh(cloudGeo, cloudMaterial);
+
+scene.add(clouds);
 scene.add(globe);
 scene.add(sky);
 
@@ -91,6 +108,9 @@ animate();
 // Animates WebGL Canvas
 function animate() {
   requestAnimationFrame(animate);
+  clouds.rotation.y += 0.001;
+
+  controls.update();
   renderer.render(scene, camera);
 }
 
@@ -99,9 +119,9 @@ function latLongToVector3(latitude, longitude, radius) {
   var phi = (latitude) * Math.PI / 180;
   var theta = (longitude - 180) * Math.PI / 180;
 
-  var x = -(radius) * Math.cos(phi) * Math.cos(theta);
+  var x = -((radius) * Math.cos(phi)) * Math.cos(theta);
   var y = (radius) * Math.sin(phi);
-  var z = (radius) * Math.cos(phi) * Math.sin(theta);
+  var z = ((radius) * Math.cos(phi)) * Math.sin(theta);
 
   return new THREE.Vector3(x, y, z);
 }
