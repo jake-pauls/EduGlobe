@@ -3,7 +3,7 @@
 </p>
 <p align="center">
   <strong>EduGlobe</strong>
-  <strong>Created By: Jacob Pauls, Alex Lazcano, Grishma Bhattarai, and Jake Insung</strong></br>
+  <strong>Created By: Jacob Pauls, Alex Lazcano, Grishma Bhattarai, and Jake Kim</strong></br>
   <a href="https://www.eduglobe.space/" >Live URL</a>
 </p>
 <p align="center">
