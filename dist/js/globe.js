@@ -1,3 +1,13 @@
+
+const dataset = [
+  {
+    origin: { name: "New York", latitude: 40.73061, longitude: -73.935242 }
+  },
+  {
+    origin: { name: "Miami", latitude: 25.761681, longitude: -80.191788 }
+  }
+];
+
 //import * as THREE from "three";
 
 //import { BackSide } from "three";
@@ -38,9 +48,7 @@ d3.json("https://raw.githubusercontent.com/baronwatts/data/master/world.json",
       .equirectangular()
       .translate([1024, 512])
       .scale(326);
-
-    console.log(data.objects.countries);
-
+      
     // Retrieve polygonal information from topographical json file
     var countries = topojson.feature(data, data.objects.countries);
 
@@ -72,7 +80,8 @@ d3.json("https://raw.githubusercontent.com/baronwatts/data/master/world.json",
 
     controls = new THREE.OrbitControls(camera, renderer.domElement);
   
-    var texture = new THREE.TextureLoader().load("assets/worldMapHD.jpg");
+    //    var texture = new THREE.TextureLoader().load("assets/worldMapHD.jpg");
+    var texture = new THREE.Texture(canvas.node());
     texture.needsUpdate = true;
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
@@ -96,7 +105,7 @@ d3.json("https://raw.githubusercontent.com/baronwatts/data/master/world.json",
       emissive: city,
       emissiveIntensity: 0.2,
       color: new THREE.Color("white"),
-      transparent: false,
+      transparent: true,
       opacity: 1,
     });
     var globe = new THREE.Mesh(geometry, material);
@@ -112,21 +121,18 @@ d3.json("https://raw.githubusercontent.com/baronwatts/data/master/world.json",
     scene.add(sky);
 
     camera.position.z = 4;
-
-    var animate = function (controls) {
-      requestAnimationFrame(animate);
-      renderer.render(scene, camera);
-    }
-
+    plotDataPoints(dataset, scene);
     animate();
-
-    // Vector Math -> Rendering Data as Points on the Globe
-
-
   }
 );
 
-// helper function to convert latitude and longitude to Vector3 values which can be rendered on the globe
+// Animates WebGL Canvas
+function animate() {
+  requestAnimationFrame(animate);
+  renderer.render(scene, camera);
+}
+
+// Converts latitude and longitude to Vector3 values which can be rendered on the globe
 function latLongToVector3(lat, lon, radius) {
   var phi = (lat)*Math.PI/180;
   var theta = (lon-180)*Math.PI/180;
@@ -136,4 +142,23 @@ function latLongToVector3(lat, lon, radius) {
   var z = (radius) * Math.cos(phi) * Math.sin(theta);
 
   return new THREE.Vector3(x,y,z);
+}
+
+function plotDataPoints(data, scene) {
+  data.map((d, i) => {
+      var latitude = d.origin.latitude;
+      var longitude = d.origin.longitude;
+      var vector3 = latLongToVector3(latitude, longitude, 2);
+
+      // Have Three.js generate planes at the data points
+      var pointGeometry = new THREE.SphereGeometry(1, 10, 10);
+      var pointMaterial = new THREE.MeshBasicMaterial({
+        color: new THREE.Color("white")
+      })
+      var pointMesh = new THREE.Mesh(pointGeometry, pointMaterial);
+
+      // Set the plane in 3D space
+      pointMesh.position.set(vector3);
+      scene.add(pointMesh);
+  });
 }
