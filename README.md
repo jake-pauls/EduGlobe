@@ -12,8 +12,6 @@
 
 --- 
 
-## Built using Three.js and vanilla HTML/CSS/JavaScript
-
 ## What inspired you to create this project?
 We didn’t enjoy looking up data and information on different websites about important topics which is time-consuming and inconvenient. We realized that there is not a single platform that gives you immediate statistical data and information about the world's emerging issues. As such, we felt as though we should create a platform that could successfully pull data and provide visualization for all of these in one place.
 
