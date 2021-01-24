@@ -1,35 +1,44 @@
 // Fetch APIs
 
 // COVID Data Per Country
-// https://disease.sh/v3/covid-19/countries?yesterday=true&twoDaysAgo=false&sort=cases&allowNull=true
-
 const COVID_API_URL = "https://disease.sh/v3/covid-19/countries?yesterday=true&twoDaysAgo=false&sort=cases&allowNull=true";
 
-callAPI(COVID_API_URL);
+// NASA Events API geoJSON
+const DISASTER_API_URL = "https://eonet.sci.gsfc.nasa.gov/api/v3/events/geojson?limit=5";
+
+window.addEventListener("load", (event) => {
+    var covid_button = document.getElementById("covid_button");
+
+    // Event Listeners for Buttons
+    covid_button.addEventListener('click', () => {
+        callAPI(COVID_API_URL);
+    });
+});
 
 function callAPI(api_url) {
     fetch(api_url)
         .then(
-            function (response) {
+            (response) => {
                 if (response.status !== 200) {
-                    console.log('Looks like there was a problem. Status Code: ' + response.status);
+                    console.log('Oops! Error retrieving API data with status code: ' + response.status);
                     return;
                 }
-
-                // Examine the text in the response
-                response.json().then(function (data) {
-                    console.log(data);
-                    processJSONData(data);
-                });
-            }
-        )
-        .catch(function (err) {
-            console.log('Fetch Error :-S', err);
+                response.json().then(
+                    (data) => {
+                        processCovidJSON(data);
+                    });
+            })
+        .catch((err) => {
+            console.log('Oops! An error occurred during the fetch:-S', err);
         });
 }
 
-function processJSONData(jsonData) {
-    if (typeof jsonData != 'string')
-        jsonData = JSON.stringify(jsonData, undefined, 2);
-    document.getElementById("json").innerHTML = jsonData;
+function processCovidJSON(jsonData) {
+    var covidData = new Array();
+    for (var i = 0; i < jsonData.length; i++) {
+        countryInfo = jsonData[i].country;
+        latInfo = jsonData[i].countryInfo.lat;
+        longInfo = jsonData[i].countryInfo.long;
+        covidData[i] = [countryInfo, latInfo, longInfo];
+    }
 }
