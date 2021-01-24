@@ -1,7 +1,8 @@
-//import * as THREE from "three";
-
-//import { BackSide } from "three";
-// import { DirectionalLight } from "three";
+/**
+ *  Eduglobe.space
+ *  Written By: Alex Lazcano & Jacob Pauls
+ *  globe.js 
+ */
 
 /* Button Listeners for APIs */
 
@@ -18,7 +19,7 @@ window.addEventListener("load", (event) => {
   });
 });
 
-/* Three.js */
+/* Three.js -- WebGL */
 
 //creates scene and camera
 var scene = new THREE.Scene();
@@ -43,7 +44,6 @@ scene.add(pointLight);
 
 var ambient = new THREE.AmbientLight(0xffffff, 0.3);
 scene.add(ambient);
-
 
 controls = new THREE.OrbitControls(camera, renderer.domElement);
 
@@ -88,12 +88,10 @@ var cloudsTexture = new THREE.TextureLoader().load("assets/clouds2k.jpg");
 var cloudGeo = new THREE.SphereGeometry(2.01, 32, 32);
 var cloudMaterial = new THREE.MeshPhongMaterial({
   map: cloudsTexture,
-
   wireframe: false,
   color: new THREE.Color("white"),
   transparent: true,
   opacity: 0.3,
-
 });
 
 //render the earth
@@ -106,7 +104,11 @@ scene.add(sky);
 camera.position.z = 4;
 animate();
 
-// Animates WebGL Canvas
+/* --- Helper Functions --- */
+
+/**
+ * Animates the WebGL canvas
+ */
 function animate() {
   requestAnimationFrame(animate);
   clouds.rotation.y += 0.001;
@@ -116,6 +118,12 @@ function animate() {
 }
 
 // Converts latitude and longitude to Vector3 values which can be rendered on the globe
+/**
+ * Converts latitude and longitude to Vector3 values which can be rendered on the globe
+ * @param {float} latitude The latitude for a given point on the map
+ * @param {float} longitude The longitude for a given point on the map
+ * @param {float} radius The radius as it relates to the center of the Earth - or as it relates to the center of the SphereGeometry Earth in WebGL
+ */
 function latLongToVector3(latitude, longitude, radius) {
   var phi = (latitude) * Math.PI / 180;
   var theta = (longitude - 180) * Math.PI / 180;
@@ -127,6 +135,11 @@ function latLongToVector3(latitude, longitude, radius) {
   return new THREE.Vector3(x, y, z);
 }
 
+/**
+ * Plots points for our COVID-19 data
+ * @param {Array} data JavaScript Object array containing the desired fields to be visualized
+ * @param {Scene} scene The scene required to drop the data points
+ */
 function plotCovidDataPoints(data, scene) {
   // Check dropdown
   covid_parameter_type = document.getElementById("covid_parameter_type").selectedIndex;  
@@ -189,8 +202,12 @@ function plotCovidDataPoints(data, scene) {
   document.getElementById("numberRendered").value = counter;
 }
 
+/**
+ * Cleans up data points rendered onto the WebGL canvas containing a specific name
+ * @param {string} dataPointName The name set in Three.js for the plotted data point
+ * @param {int} bound The number of data points to remove
+ */
 function cleanupDataPoints(dataPointName, bound) {
-  console.log("bound! -> "+bound);
   for (var i = 0; i < bound; i++) {
       var dataPoint = scene.getObjectByName(dataPointName+i);
       scene.remove(dataPoint);
@@ -199,6 +216,11 @@ function cleanupDataPoints(dataPointName, bound) {
 }
 
 /* API Functions */
+
+/**
+ * Calls desired API using the fetch() function
+ * @param {string} api_url URL pointing to API to be fetched
+ */
 function callAPI(api_url) {
   fetch(api_url)
     .then(
@@ -217,7 +239,10 @@ function callAPI(api_url) {
     });
 }
 
-// [country, lat, long]
+/**
+ * Parses COVID-19 JSON data int JavaScript Object arrays retrieved from the fetched API
+ * @param {JSON} jsonData 
+ */
 function parseCovidJSON(jsonData) {
   var covidData = new Array();
   for (var i = 0; i < jsonData.length; i++) {
