@@ -8,7 +8,7 @@
   <a href="https://www.eduglobe.space/" >Live Demo</a>
 </p>
 <p align="center">
-  <img alt="Threejs" src="https://img.shields.io/badge/Threejs-r124-blue" />
+  <img alt="Threejs" src="https://img.shields.io/badge/three.js-r124-blue" />
 </p>
 
 --- 
