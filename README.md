@@ -1,46 +1,49 @@
 <p align="center">
-  <img src="./dist/assets/eduglobe-logo.svg" alt="Legacy Edition" height="250" />
+  <img src="./dist/assets/eduglobe-logo.svg" alt="EduGlobe" height="250" />
 </p>
 <p align="center">
-  <strong>EduGlobe</strong>
-  <strong>Created By: Jacob Pauls, Alex Lazcano, Grishma Bhattarai, and Jake Kim</strong></br>
-  <a href="https://www.eduglobe.space/" >Live URL</a>
+  <font size="5"><strong>EduGlobe</strong></font><br/>
+  <strong> 🌏 CUNY Hackathon 2021 Finalist 🏅 3rd Place Overall 🏅 Best Presentation 🌏</strong><br/>
+  <code>Created By: Jacob Pauls, Alex Lazcano, Grishma Bhattarai, and Jake Kim</code></br>
+  <a href="https://www.eduglobe.space/" >Live Demo</a>
 </p>
 <p align="center">
   <img alt="Three.Js" src="https://img.shields.io/badge/Three%2Cjs-r124-blue" />
 </p>
+<p align="center">
+  <img src="https://www.svgrepo.com/show/165969/html.svg" alt="HTML5" height="25" style="padding-right:5px;">
+  <img src="https://www.svgrepo.com/show/102011/css-3.svg" alt="CSS3" height="25" style="padding-right:5px;">
+  <img src="https://www.svgrepo.com/show/306259/javascript.svg" alt="JS" height="25" style="padding-right:5px;">
+  <img src="https://ucarecdn.com/22a0a69b-689f-46c9-866b-57650f31fde9/" alt="Three.js" height="25" style="padding-right:5px;">
+  <img src="https://www.svgrepo.com/show/306463/netlify.svg" alt="Netlify" height="25">
+</p>
 
 --- 
 
-## What inspired you to create this project?
-We didn’t enjoy looking up data and information on different websites about important topics which is time-consuming and inconvenient. We realized that there is not a single platform that gives you immediate statistical data and information about the world's emerging issues. As such, we felt as though we should create a platform that could successfully pull data and provide visualization for all of these in one place.
-
-While simultaneously displaying statistics for health, environment, and other world-related concerns, we also hoped that EduGlobe could be a platform promoting education and awareness of these issues.
+## Inspiration
+- The realization that there isn't a single platform that provides visualization for a multitude of statistics and topics at once
+- Something that is incredibly visual and intuitive could also be used as an education tool
+- A strong desire to build something in [Three.js](https://threejs.org/) and work a little bit with 3D mathematics in a project
 
 ## What does it do?
-It is a 3D educational and interactive website that provides information and immediate statistical data on the world’s emerging issues. The goal is to promote global awareness so people are informed and continuously conscientiousness about the state of the world.
+- Provides real time data visualization for a COVID-19 API and an Earthquake API on a 3D globe as either bars or spheres
+- Provides brief information on the issue visualized on the globe
 
 ## How did you guys build this?
-We used a JavaScript library named [Three.js](https://threejs.org/) to create and render the globe using texture, bump, specular maps and phong lighting. 
-
-Once we retrieved data from our desired APIs, we created a function to plot the converted coordinates into 3D vectors which we could then visualize on the globe with sphere or box geometries. From here, Three.js allows us to decide different colours, opacities, and other visual features in order for us to determine how to meaningfully represent the retrieved data.
-
-Finally, we deployed our webapp to [Netlify](https://www.netlify.com/) and used a custom domain from [domain.com](https://www.domain.com/).
+- 3D globe, background, clouds, specular, and bump map rendering in [Three.js](https://threejs.org/)
+- 3D plotted data as either SphereGeometry or BoxGeometry in [Three.js](https://threejs.org/)
+      - Data was plotted by retrieving a latitude/longitude from the APIs and then converting it to a plot on the 3D globe using spherical geometry
+- Basic HTML/CSS for UI components
+- Deployed to [Netlify](https://www.netlify.com/)
 
 ## What were some of the challenges you encountered?
-We had a difficult time finding useful APIs (particularly ones that returned data for multiple countries or continents at once) to implement when appending data to the map. This was so important, because we wanted the data to be truly global - without making too many API calls. Furthermore, plotting this data involved a lot of debugging within formulas pertaining to spherical geometry. As said above, the calculations for the 3D vectors sometimes got fairly involved, making it confusing.
-
-## Notable Accomplishments
-One of the best accomplishments is when we figured out how to plot points in 3D from a coordinate onto a map.
-We really enjoyed seeing the final product of our globe. Whenever we load the website, we find it really eye-catching and creative. 
-
-Another accomplishment was rendering the globe and its data in a performant way. One of our original implementations took upwards of 5-10 seconds to load. Eventually, we found textures and maps for the globe that provide a high-quality feel while keeping the load times small.
-
-## What did you learn?
-We learned that through collaboration we could generate more ideas and solutions which helped us see multiple perspectives. As well, we respected each other’s ideas and persisted throughout the process. The mistakes we made along the way improved each of our skillsets in our desired disciplines.
+- Finding useful APIs that provided data for multiple continents/countries at once
+      - Wanted to keep API call count low and still visualize lots of data
+- Plotting the data points, as the calculations for the 3D vectors were confusing at first
+- Rendering the globe in a way that would be performant for a web server, original implemntation took upwards of 10 seconds to load. Eventually this was minimized and the globe renders within 3-5 seconds on most machines
 
 ## What's next for EduGlobe?
-We want to include more relevant statistical data so we can have a more comprehensive amount of data on our very own website. One idea was also to include an audio feature so people can hear the information and statistics out loud. As well, we'd really love to expand upon the UI and match our mockups to a greater extent - so EduGlobe is more of a data visualization 'experience'. Another worthwhile implementation would be to view the live statistics/metrics on or around the map, as opposed to only the currently represented bars/spheres. This way, our data can truly be represented to its fullest extent and EduGlobe can persist as a fast way to stay up to date on the world's most relevant issues.
+- Updating this project would mean including more relevant statistical data to truly make it comprehensive against most of the world's issues
 
 --- 
 
