@@ -8,7 +8,7 @@
   <a href="https://www.eduglobe.space/" >Live Demo</a>
 </p>
 <p align="center">
-  <img alt="Three.Js" src="https://img.shields.io/badge/Three%2Cjs-r124-blue" />
+  <img alt="Threejs" src="https://img.shields.io/badge/Threejs-r124-blue" />
 </p>
 
 --- 
@@ -16,15 +16,15 @@
 ## Inspiration
 - The realization that there isn't a single platform that provides visualization for a multitude of statistics and topics at once
 - Something that is incredibly visual and intuitive could also be used as an education tool
-- A strong desire to build something in [Three.js](https://threejs.org/) and work a little bit with 3D mathematics in a project
+- A strong desire to build something in [three.js](https://threejs.org/) and work a little bit with 3D mathematics in a project
 
 ## What does it do?
 - Provides real time data visualization for a COVID-19 API and an Earthquake API on a 3D globe as either bars or spheres
 - Provides brief information on the issue visualized on the globe
 
 ## How did you guys build this?
-- 3D globe, background, clouds, specular, and bump map rendering in [Three.js](https://threejs.org/)
-- 3D plotted data as either SphereGeometry or BoxGeometry in [Three.js](https://threejs.org/)
+- 3D globe, background, clouds, specular, and bump map rendering in [three.js](https://threejs.org/)
+- 3D plotted data as either SphereGeometry or BoxGeometry in [three.js](https://threejs.org/)
       - Data was plotted by retrieving a latitude/longitude from the APIs and then converting it to a plot on the 3D globe using spherical geometry
 - Basic HTML/CSS for UI components
 - Deployed to [Netlify](https://www.netlify.com/)
