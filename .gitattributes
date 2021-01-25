@@ -1,3 +1,10 @@
+# Remove '/dist' as a vendored path
+dist/* linguist-vendored=false
+
+# Exclude libraries from linguist
+dist/js/lib/* linguist-vendored
+
+# Languages
 *.html linguist-language=HTML
 *.css linguist-language=CSS
 *.js linguist-language=JavaScript
