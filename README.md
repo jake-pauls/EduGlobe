@@ -10,13 +10,6 @@
 <p align="center">
   <img alt="Three.Js" src="https://img.shields.io/badge/Three%2Cjs-r124-blue" />
 </p>
-<p align="center">
-  <img src="https://www.svgrepo.com/show/165969/html.svg" alt="HTML5" height="25" style="padding-right:5px;">
-  <img src="https://www.svgrepo.com/show/102011/css-3.svg" alt="CSS3" height="25" style="padding-right:5px;">
-  <img src="https://www.svgrepo.com/show/306259/javascript.svg" alt="JS" height="25" style="padding-right:5px;">
-  <img src="https://ucarecdn.com/22a0a69b-689f-46c9-866b-57650f31fde9/" alt="Three.js" height="25" style="padding-right:5px;">
-  <img src="https://www.svgrepo.com/show/306463/netlify.svg" alt="Netlify" height="25">
-</p>
 
 --- 
 
