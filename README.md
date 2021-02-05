@@ -8,6 +8,7 @@
   <a href="https://www.eduglobe.space/" >Live Demo</a>
 </p>
 <p align="center">
+  <a href="https://app.netlify.com/sites/objective-allen-d1bcd7/deploys" style="margin-right:3px;"><img src="https://api.netlify.com/api/v1/badges/0e81f5d5-73ae-4f7c-9fbf-dca243246a39/deploy-status" alt="Netlify Status" /></a>
   <img alt="Threejs" src="https://img.shields.io/badge/three.js-r124-blue" />
 </p>
 
